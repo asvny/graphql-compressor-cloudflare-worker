@@ -1,24 +1,29 @@
 {
   "version": 2,
-  "name": "GraphQL Compressor",
+  "name": "graphql-compressor",
   "builds": [
-    {
-      "src": "./server/index.js",
-      "use": "@now/node-server"
-    }
+    { "src": "server/index.js", "use": "@now/node" },
+    { "src": "server/static/*.html", "use": "@now/static" },
+    { "src": "service-worker/*.js", "use": "@now/static" }
   ],
   "routes": [
     {
+      "src": "/graphql",
+      "dest": "/server/index.js",
+      "methods": ["GET", "POST"]
+    },
+    {
+      "src": "/",
+      "dest": "/server/static/index.html",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/service-worker/sw.js",
+      "methods": ["GET"],
       "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
-      },
-      "src": "/.*",
-      "dest": "./server/index.js"
+        "cache-control": "max-age=0,no-cache,no-store,must-revalidate"
+      }
     }
-  ],
-  "env": {
-    "VERSION": "1.0.0"
-  }
+  ]
 }

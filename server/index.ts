@@ -2,7 +2,9 @@ import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import * as graphql from "graphql";
 import * as faker from "faker";
+import * as cors from "cors";
 import * as fakeResponse from "./responses";
+import * as path from "path";
 
 const app = express();
 const { buildSchema } = graphql;
@@ -10,12 +12,12 @@ const PORT = 8080;
 
 const schema = buildSchema(`
   type Query {
-    person: [Person]
+    person(count: Int): [Person]
   }
   
   type Person {
     id: String
-    guid: String
+    name: String
     email: String
     friends: [Friend]
   }  
@@ -34,24 +36,30 @@ const schema = buildSchema(`
 `);
 
 const root = {
-  person: () => {
-    let count = random(20, 25);
+  person: ({ count: _count }: { count: number }) => {
+    let count = _count || 25;
     let fakeFriends = fakeResponse.FRIENDS;
+    let fakeCount = random(20, 25);
 
     let records = Array.from(Array(count)).map(i => {
       shuffle(fakeFriends);
 
       return {
         uuid: faker.random.uuid(),
+        name: faker.name.firstName() + " " + faker.name.lastName(),
         id: faker.random.number(),
         email: faker.internet.email(),
-        friends: fakeFriends.slice(0, count)
+        friends: fakeFriends.slice(0, fakeCount)
       };
     });
 
     return records;
   }
 };
+
+app.use("/", express.static(path.join(__dirname, "static")));
+app.use(cors());
+app.options("*", cors());
 
 app.use(
   "/graphql",
