@@ -1,1 +1,0 @@
-# graphql-compressor-cloudflare-worker
