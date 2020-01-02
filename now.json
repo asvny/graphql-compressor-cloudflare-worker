@@ -4,7 +4,7 @@
   "builds": [
     { "src": "server/index.js", "use": "@now/node" },
     { "src": "server/static/*.html", "use": "@now/static" },
-    { "src": "service-worker/*.js", "use": "@now/static" }
+    { "src": "server/static/*.js", "use": "@now/static" }
   ],
   "routes": [
     {
@@ -19,7 +19,7 @@
     },
     {
       "src": "/sw.js",
-      "dest": "/service-worker/sw.js",
+      "dest": "/server/static/sw.js",
       "methods": ["GET"],
       "headers": {
         "cache-control": "max-age=0,no-cache,no-store,must-revalidate"
