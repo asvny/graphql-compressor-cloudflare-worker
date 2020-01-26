@@ -5,7 +5,7 @@
   "author": "asvny",
   "license": "MIT",
   "scripts": {
-    "start-server": "npx nodemon --config nodemon.json"
+    "start": "npx nodemon --config nodemon.json"
   },
   "dependencies": {
     "@types/express": "^4.17.2",
